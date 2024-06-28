@@ -68,3 +68,6 @@ export const BlogValidationSchema = yup.object().shape({
     .oneOf(categories, "Invalid category!")
     .required("Category is missing!"),
 });
+export const CommentValidationSchema = yup.object().shape({
+  comment: yup.string().required("Comment is missing!"),
+});

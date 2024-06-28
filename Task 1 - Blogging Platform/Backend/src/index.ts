@@ -10,10 +10,12 @@ app.use(express.urlencoded({ extended: false }));
 
 import authRouter from "./routes/auth";
 import blogRouter from "./routes/blog";
+import commentRouter from "./routes/comment";
 import { errorHandler } from "./middlewares/error";
 
 app.use("/api/auth", authRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
