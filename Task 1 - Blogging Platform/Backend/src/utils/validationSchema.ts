@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { isValidObjectId } from "mongoose";
+import { categories } from "./category";
 
 export const CreateUserSchema = yup.object().shape({
   name: yup
@@ -58,4 +59,12 @@ export const UpdatePasswordSchema = yup.object().shape({
 export const SignInValidationSchema = yup.object().shape({
   email: yup.string().required("Email is missing!").email("Invalid email id!"),
   password: yup.string().trim().required("Password is missing!"),
+});
+export const BlogValidationSchema = yup.object().shape({
+  title: yup.string().required("Title is missing!"),
+  content: yup.string().required("Content is missing!"),
+  category: yup
+    .string()
+    .oneOf(categories, "Invalid category!")
+    .required("Category is missing!"),
 });
