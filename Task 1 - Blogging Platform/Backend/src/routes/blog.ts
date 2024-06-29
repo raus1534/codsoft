@@ -1,4 +1,10 @@
-import { createBlog, getUserBlog, updateBlog } from "#/controllers/blog";
+import {
+  createBlog,
+  deleteBlog,
+  getSpecificBlog,
+  getUserBlog,
+  updateBlog,
+} from "#/controllers/blog";
 import { isAuth, isVerified } from "#/middlewares/auth";
 import fileParser from "#/middlewares/fileParser";
 import { validate } from "#/middlewares/validator";
@@ -23,6 +29,8 @@ router.patch(
   validate(BlogValidationSchema),
   updateBlog
 );
-router.get("/:userId", isAuth, isVerified, getUserBlog);
+router.get("/user/:userId", getUserBlog);
+router.get("/single/:blogId", getSpecificBlog);
+router.delete("/:blogId", isAuth, isVerified, deleteBlog);
 
 export default router;

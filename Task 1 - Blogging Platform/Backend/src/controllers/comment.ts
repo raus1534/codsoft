@@ -24,7 +24,10 @@ export const createComment: RequestHandler = async (
   if (!isValidObjectId(blog))
     return res.status(422).json({ error: "Invalid Blog" });
 
-  const isExisting = await Comment.findOne({ owner: ownerId });
+  const isExistingBlog = await Blog.findById(blog);
+  if (!isExistingBlog) return res.status(404).json({ error: "Invalid Blog" });
+
+  const isExisting = await Comment.findOne({ owner: ownerId, blog });
   if (isExisting)
     return res.status(422).json({ error: "Comment Already Exist" });
   const newComment = await Comment.create({
@@ -73,4 +76,20 @@ export const getComments: RequestHandler = async (req, res) => {
   res.status(201).json({
     comments,
   });
+};
+
+export const deleteComment: RequestHandler = async (req, res) => {
+  const { commentId } = req.params;
+  const ownerId = req.user.id;
+
+  if (!isValidObjectId(commentId))
+    return res.status(422).json({ error: "Invalid Request" });
+
+  const comment = await Comment.findById(commentId);
+  if (comment?.owner.toString() !== ownerId.toString())
+    return res.status(422).json({ error: "Unauthorized Access" });
+
+  await Comment.findByIdAndDelete(commentId);
+
+  return res.status(201).json({ message: "Comment Deleted Successfully" });
 };

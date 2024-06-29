@@ -7,14 +7,12 @@ export interface BlogDocument {
   owner: ObjectId;
   title: string;
   content: string;
+  views: number;
   poster?: { url: string; publicId: string };
   category: categoriesTypes;
 }
-interface Methods {
-  comparePassword(password: string): Promise<boolean>;
-}
 
-const blogSchema = new Schema<BlogDocument, {}, Methods>(
+const blogSchema = new Schema<BlogDocument>(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -35,6 +33,10 @@ const blogSchema = new Schema<BlogDocument, {}, Methods>(
       url: String,
       publicId: String,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
     category: {
       type: String,
       required: true,
@@ -44,4 +46,4 @@ const blogSchema = new Schema<BlogDocument, {}, Methods>(
   { timestamps: true }
 );
 
-export default model("Blog", blogSchema) as Model<BlogDocument, {}, Methods>;
+export default model("Blog", blogSchema) as Model<BlogDocument>;

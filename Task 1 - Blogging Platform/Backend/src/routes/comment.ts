@@ -1,5 +1,6 @@
 import {
   createComment,
+  deleteComment,
   getComments,
   updateComment,
 } from "#/controllers/comment";
@@ -25,5 +26,6 @@ router.patch(
   updateComment
 );
 router.get("/:blogId", getComments);
+router.delete("/:commentId", isAuth, isVerified, deleteComment);
 
 export default router;

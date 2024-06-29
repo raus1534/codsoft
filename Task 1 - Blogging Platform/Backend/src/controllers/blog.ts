@@ -5,6 +5,7 @@ import Blog, { BlogDocument } from "#/models/Blog";
 import formidable from "formidable";
 import cloudinary from "#/cloud";
 import { isValidObjectId } from "mongoose";
+import Comment from "#/models/Comment";
 
 interface CreateBlogRequest extends RequestWithFiles {
   body: {
@@ -99,4 +100,46 @@ export const getUserBlog: RequestHandler = async (req, res) => {
   res.status(201).json({
     blogs,
   });
+};
+export const getSpecificBlog: RequestHandler = async (req, res) => {
+  const { blogId } = req.params;
+
+  if (!isValidObjectId(blogId))
+    return res.status(403).json({ error: "Invalid request!" });
+
+  const blog = await Blog.findByIdAndUpdate(
+    blogId,
+    { $inc: { views: 1 } },
+    { new: true }
+  );
+
+  if (!blog) {
+    return res.status(404).json({ error: "Blog not found!" });
+  }
+
+  res.status(200).json({ blog });
+};
+export const deleteBlog: RequestHandler = async (req, res) => {
+  const { blogId } = req.params;
+
+  if (!isValidObjectId(blogId))
+    return res.status(403).json({ error: "Invalid request!" });
+
+  const blog = await Blog.findById(blogId);
+
+  if (!blog) {
+    return res.status(404).json({ error: "Blog not found!" });
+  }
+
+  const public_id = blog.poster?.publicId;
+  if (public_id) {
+    const { result } = await cloudinary.uploader.destroy(public_id);
+    if (result !== "ok") {
+      return res.status(422).json({ error: "Couldn't Delete The Actor!!" });
+    }
+  }
+  await Blog.findByIdAndDelete(blogId);
+  await Comment.deleteMany({ blog: blogId });
+
+  res.status(200).json({ message: "Blog Deleted Successfully" });
 };
