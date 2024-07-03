@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { IoLogOutOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import Container from "./Container";
 import logo from "../assets/logo.png";
@@ -11,7 +12,8 @@ export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { authInfo, handleLogout } = useAuth() as AuthContextType;
-  const isLoggedIn = authInfo.isLoggedIn;
+  const { isLoggedIn, profile } = authInfo;
+  const avatar = profile?.avatar?.url;
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -51,12 +53,20 @@ export default function Navbar() {
             <div className="flex items-center space-x-3">
               <AppSearchForm />
               {isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  className="hidden text-lg font-semibold sm:flex"
-                >
-                  Log Out
-                </button>
+                <>
+                  <Link
+                    to={"/dashboard"}
+                    className="w-8 h-8 p-0.5 border-2 border-white rounded-full cursor-pointer"
+                  >
+                    <img src={avatar || logo} alt="Dashboard" />
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="hidden text-lg font-semibold sm:flex"
+                  >
+                    <IoLogOutOutline size={30} />
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/auth/signin"

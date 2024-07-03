@@ -7,6 +7,7 @@ import SignIn from "@components/auth/SignIn";
 import ForgetPassword from "@components/auth/ForgetPassword";
 import EmailVerification from "@components/auth/EmailVerification";
 import ConfirmPassword from "@components/auth/ConfirmPassword";
+import Dashboard from "@components/Dashboard";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         />
         <Route path="/auth/forget-password" element={<ForgetPassword />} />
         <Route path="/auth/reset-password" element={<ConfirmPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/blog/:blogId" element={<Blog />} />
       </Routes>
     </>

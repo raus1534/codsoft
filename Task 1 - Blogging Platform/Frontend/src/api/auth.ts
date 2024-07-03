@@ -91,3 +91,17 @@ export const resendOTP = async (userId: string) => {
     return handleAxiosError(error);
   }
 };
+export const updateUserProfile = async (userInfo: any) => {
+  const token = localStorage.getItem("auth-token");
+  try {
+    const { data } = await client.post("/auth/update-profile", userInfo, {
+      headers: {
+        authorization: "BlogIn " + token,
+        accept: "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};

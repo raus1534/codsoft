@@ -5,7 +5,13 @@ import { useNotification } from "../hooks";
 import { NotificationType } from "./NotificationProvider";
 
 interface AuthInfoType {
-  profile: any;
+  profile: {
+    id: string;
+    name: string;
+    email: string;
+    verified: boolean;
+    avatar: any;
+  } | null;
   isPending: boolean;
   isLoggedIn: boolean;
   error: string;

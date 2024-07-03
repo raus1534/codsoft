@@ -6,9 +6,11 @@ import {
   sendReVerificationToken,
   signIn,
   updatePassword,
+  updateProfile,
   verifyEmail,
 } from "#/controllers/auth";
 import { isAuth, isValidPassResetToken } from "#/middlewares/auth";
+import fileParser from "#/middlewares/fileParser";
 import { validate } from "#/middlewares/validator";
 import {
   CreateUserSchema,
@@ -36,6 +38,7 @@ routes.post(
   isValidPassResetToken,
   updatePassword
 );
+routes.post("/update-profile", isAuth, fileParser, updateProfile);
 routes.get("/is-auth", isAuth, sendProfile);
 routes.post("/sign-in", validate(SignInValidationSchema), signIn);
 

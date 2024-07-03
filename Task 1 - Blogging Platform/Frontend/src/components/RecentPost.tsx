@@ -14,7 +14,7 @@ export default function RecentPost() {
           </p>
           <span className="text-xs text-gray-700">July 1, 2024</span>
         </div>
-      </div>{" "}
+      </div>
       <div className="flex items-center p-1 space-x-3">
         <img src={test} alt="blog" className="h-16 rounded-lg" />
         <div>
