@@ -2,11 +2,13 @@ import express from "express";
 import "dotenv/config";
 import "express-async-errors";
 import "./db";
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 import authRouter from "./routes/auth";
 import blogRouter from "./routes/blog";

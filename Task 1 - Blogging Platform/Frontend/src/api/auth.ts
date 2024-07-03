@@ -71,7 +71,11 @@ export const validateResetToken = async (token: string, userId: string) => {
     return handleAxiosError(error);
   }
 };
-export const resetPassword = async (passwordInfo: string) => {
+export const resetPassword = async (passwordInfo: {
+  password: string;
+  userId: string;
+  token: string;
+}) => {
   try {
     const { data } = await client.post("/auth/update-password", passwordInfo);
     return data;

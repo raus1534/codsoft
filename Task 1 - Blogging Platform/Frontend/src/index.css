@@ -1,7 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* remove input number arrow  */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 .test {
   border: 1px solid black;
+}
+@keyframes bgSlide {
+  from {
+    background-position: -100% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+.bg-slide {
+  background: linear-gradient(to right, transparent 50%, black 50%);
+  background-size: 200% 100%;
+  transition: background-position 0.3s ease-in-out;
+}
+
+.bg-slide-hover:hover {
+  background-position: 100% 0;
+}
+.open-sans {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
 }

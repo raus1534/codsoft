@@ -32,7 +32,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const { updateNotification } = useNotification() as NotificationType;
-  const [authInfo, setAuthInfo] = useState<AuthInfoType>({
+  const [authInfo, setAuthInfo] = useState({
     ...defaultAuthInfo,
   });
   const navigate = useNavigate();
@@ -53,16 +53,18 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       isLoggedIn: true,
       error: "",
     });
-    localStorage.setItem("auth-token", user.loginToken);
+    localStorage.setItem("auth-token", user.token);
   };
 
   const isAuth = async () => {
     setAuthInfo({ ...authInfo, isPending: true });
     const token = localStorage.getItem("auth-token");
     if (!token) return setAuthInfo({ ...authInfo, isPending: false });
+
     const { error, user } = await getIsAuth(token);
 
     if (error) return setAuthInfo({ ...authInfo, isPending: false, error });
+
     setAuthInfo({
       profile: { ...user },
       isPending: false,
@@ -79,7 +81,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     isAuth();
-    console.log(authInfo);
     // eslint-disable-next-line
   }, []);
 

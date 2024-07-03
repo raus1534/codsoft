@@ -4,9 +4,14 @@ import { FaBars } from "react-icons/fa";
 import Container from "./Container";
 import logo from "../assets/logo.png";
 import AppSearchForm from "./AppSearchForm";
+import { AuthContextType } from "@context/AuthProvider";
+import { useAuth } from "@hooks/index";
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const { authInfo, handleLogout } = useAuth() as AuthContextType;
+  const isLoggedIn = authInfo.isLoggedIn;
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -45,9 +50,9 @@ export default function Navbar() {
             </ul>
             <div className="flex items-center space-x-3">
               <AppSearchForm />
-              {false ? (
+              {isLoggedIn ? (
                 <button
-                  // onClick={handleLogout}
+                  onClick={handleLogout}
                   className="hidden text-lg font-semibold sm:flex"
                 >
                   Log Out

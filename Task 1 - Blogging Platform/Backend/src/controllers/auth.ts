@@ -41,6 +41,8 @@ export const verifyEmail: RequestHandler = async (
   res
 ) => {
   const { token, userId } = req.body;
+  if (!isValidObjectId(userId))
+    return res.status(422).json({ error: "Invalid User Id" });
 
   const verificationToken = await emailVerificationToken.findOne({
     owner: userId,
@@ -49,6 +51,8 @@ export const verifyEmail: RequestHandler = async (
   if (!verificationToken)
     return res.status(403).json({ error: "Invalid token!" });
 
+  const isExistingUser = await User.findById(userId);
+  if (!isExistingUser) return res.status(404).json({ error: "User not Found" });
   const isMatched = await verificationToken.compareToken(token);
   if (!isMatched) return res.status(403).json({ error: "Invalid token!" });
 
@@ -56,8 +60,19 @@ export const verifyEmail: RequestHandler = async (
     verified: true,
   });
   await emailVerificationToken.findByIdAndDelete(verificationToken._id);
+  const jwtToken = jwt.sign({ userId: isExistingUser._id }, JWT_SECRET);
 
-  res.json({ message: "Your email has been verified." });
+  res.json({
+    user: {
+      id: isExistingUser._id,
+      name: isExistingUser.name,
+      email: isExistingUser.email,
+      verified: isExistingUser.verified,
+      avatar: isExistingUser.avatar?.url,
+      token: jwtToken,
+    },
+    message: "You Are Verified",
+  });
 };
 
 export const sendReVerificationToken: RequestHandler = async (req, res) => {
@@ -163,17 +178,17 @@ export const signIn: RequestHandler = async (req, res) => {
   await user.save();
 
   res.json({
-    profile: {
+    user: {
       id: user._id,
       name: user.name,
       email: user.email,
       verified: user.verified,
       avatar: user.avatar?.url,
+      token,
     },
-    token,
   });
 };
 
 export const sendProfile: RequestHandler = (req, res) => {
-  res.json({ profile: req.user });
+  res.json({ user: req.user });
 };
