@@ -1,4 +1,6 @@
 import { AxiosError } from "axios";
+import DOMPurify from "dompurify";
+import dateformat from "dateformat";
 
 export const handleAxiosError = (error: unknown) => {
   if (error instanceof AxiosError) {
@@ -19,4 +21,28 @@ export const isValidEmail = (email: string) => {
 export const isValidName = (name: string) => {
   const nameRegularEx = /^[a-z A-Z]+$/;
   return nameRegularEx.test(name);
+};
+
+export const sanitizeHTML = (html: string) => {
+  return { __html: DOMPurify.sanitize(html) };
+};
+export const sanitizeHTMLWithP = (html: string) => {
+  // Remove all HTML tags using a regular expression
+  const sanitizedContent = html.replace(/<[^>]*>?/gm, "");
+
+  // Wrap the sanitized content in <p> tags
+  const wrappedContent = `<p>${sanitizedContent}</p>`;
+
+  return { __html: DOMPurify.sanitize(wrappedContent) };
+};
+export const formatDate = (date: string = new Date().toString()): string => {
+  const originalDate = new Date(date);
+
+  const ktmDate = new Date(
+    originalDate.toLocaleString("en-US", { timeZone: "Asia/Kathmandu" })
+  );
+
+  const formattedDate = dateformat(ktmDate, "mmmm d, yyyy HH:MM 'NPT'");
+
+  return formattedDate;
 };

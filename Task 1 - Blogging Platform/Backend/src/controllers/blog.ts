@@ -32,10 +32,7 @@ export const createBlog: RequestHandler = async (
     category,
   });
 
-  const posterRes = await cloudinary.uploader.upload(poster.filepath, {
-    width: 300,
-    height: 300,
-  });
+  const posterRes = await cloudinary.uploader.upload(poster.filepath);
 
   newBlog.poster = {
     url: posterRes.secure_url,
@@ -71,10 +68,7 @@ export const updateBlog: RequestHandler = async (
       await cloudinary.uploader.destroy(blog.poster.publicId);
     }
 
-    const posterRes = await cloudinary.uploader.upload(poster.filepath, {
-      width: 300,
-      height: 300,
-    });
+    const posterRes = await cloudinary.uploader.upload(poster.filepath);
 
     blog.poster = {
       url: posterRes.secure_url,
@@ -94,13 +88,46 @@ export const getUserBlog: RequestHandler = async (req, res) => {
     return res.status(403).json({ error: "Invalid request!" });
 
   const blogs = await Blog.find({ userId }).select(
-    "title content poster _id createdAt category"
+    "title poster.url _id createdAt category"
   );
 
   res.status(201).json({
     blogs,
   });
 };
+export const getBlogByViews: RequestHandler = async (req, res) => {
+  const blogs = await Blog.find({})
+    .sort({ views: -1 })
+    .limit(4)
+    .select("_id title poster.url");
+
+  if (!blogs.length) {
+    return res.status(404).json({ error: "No blogs found!" });
+  }
+
+  res.status(200).json({ blogs });
+};
+
+export const getLatestBlogs: RequestHandler = async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: -1 }).limit(5);
+
+  if (!blogs) {
+    return res.status(404).json({ error: "Blog not found!" });
+  }
+
+  res.status(200).json({ blogs });
+};
+
+export const getOtherBlogs: RequestHandler = async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: -1 }).skip(5);
+
+  if (!blogs) {
+    return res.status(404).json({ error: "Blog not found!" });
+  }
+
+  res.status(200).json({ blogs });
+};
+
 export const getSpecificBlog: RequestHandler = async (req, res) => {
   const { blogId } = req.params;
 
@@ -111,7 +138,7 @@ export const getSpecificBlog: RequestHandler = async (req, res) => {
     blogId,
     { $inc: { views: 1 } },
     { new: true }
-  );
+  ).populate("owner", "name");
 
   if (!blog) {
     return res.status(404).json({ error: "Blog not found!" });
@@ -119,6 +146,30 @@ export const getSpecificBlog: RequestHandler = async (req, res) => {
 
   res.status(200).json({ blog });
 };
+export const getNoOfCategory: RequestHandler = async (req, res) => {
+  const result = await Blog.aggregate([
+    {
+      $group: {
+        _id: "$category",
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        category: "$_id",
+        count: 1,
+      },
+    },
+  ]);
+
+  if (!result) {
+    return res.status(404).json({ error: "Blog not found!" });
+  }
+
+  res.status(200).json({ result });
+};
+
 export const deleteBlog: RequestHandler = async (req, res) => {
   const { blogId } = req.params;
 
@@ -142,4 +193,15 @@ export const deleteBlog: RequestHandler = async (req, res) => {
   await Comment.deleteMany({ blog: blogId });
 
   res.status(200).json({ message: "Blog Deleted Successfully" });
+};
+
+export const searchBlogs: RequestHandler = async (req, res) => {
+  const { title } = req.query;
+
+  if (!title) return res.status(422).json({ error: "Query Not Found" });
+  const blogs = await Blog.find({
+    title: { $regex: title, $options: "i" },
+  });
+
+  res.json({ blogs });
 };

@@ -1,8 +1,13 @@
 import {
   createBlog,
   deleteBlog,
+  getBlogByViews,
+  getLatestBlogs,
+  getNoOfCategory,
+  getOtherBlogs,
   getSpecificBlog,
   getUserBlog,
+  searchBlogs,
   updateBlog,
 } from "#/controllers/blog";
 import { isAuth, isVerified } from "#/middlewares/auth";
@@ -30,7 +35,12 @@ router.patch(
   updateBlog
 );
 router.get("/user/:userId", getUserBlog);
+router.get("/highView", getBlogByViews);
+router.get("/latest", getLatestBlogs);
+router.get("/others", getOtherBlogs);
 router.get("/single/:blogId", getSpecificBlog);
+router.get("/byCategory", getNoOfCategory);
+router.get("/search", searchBlogs);
 router.delete("/:blogId", isAuth, isVerified, deleteBlog);
 
 export default router;

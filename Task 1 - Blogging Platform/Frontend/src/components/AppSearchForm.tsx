@@ -30,11 +30,11 @@ export default function AppSearchForm({
   };
 
   return (
-    <form className="relative" onSubmit={handleOnSubmit}>
+    <form className="relative w-full" onSubmit={handleOnSubmit}>
       <input
         type="text"
         className={
-          "transition border-2 rounded outline-none bg-transparent p-0.5 " +
+          "transition border-2 rounded outline-none bg-transparent p-0.5 w-full " +
           inputClassName
         }
         placeholder={placeholder}

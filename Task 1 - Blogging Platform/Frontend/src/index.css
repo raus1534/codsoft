@@ -39,3 +39,34 @@ input[type="number"] {
   font-family: "Open Sans", sans-serif;
   font-optical-sizing: auto;
 }
+.App {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.ck-editor__editable_inline {
+  min-height: 200px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+/* custom scroll */
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

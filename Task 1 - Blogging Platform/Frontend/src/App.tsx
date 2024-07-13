@@ -8,6 +8,9 @@ import ForgetPassword from "@components/auth/ForgetPassword";
 import EmailVerification from "@components/auth/EmailVerification";
 import ConfirmPassword from "@components/auth/ConfirmPassword";
 import Dashboard from "@components/Dashboard";
+import CreateBlog from "@components/CreateBlog";
+import UpdateBlog from "@components/UpdateBlog";
+import BlogSearch from "@components/BlogSearch";
 
 export default function App() {
   return (
@@ -25,6 +28,9 @@ export default function App() {
         <Route path="/auth/reset-password" element={<ConfirmPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/blog/:blogId" element={<Blog />} />
+        <Route path="/blog/create" element={<CreateBlog />} />
+        <Route path="/blog/update/:blogId" element={<UpdateBlog />} />
+        <Route path="/blog/search/" element={<BlogSearch />} />
       </Routes>
     </>
   );

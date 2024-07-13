@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import Container from "./Container";
@@ -10,10 +10,15 @@ import { useAuth } from "@hooks/index";
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { authInfo, handleLogout } = useAuth() as AuthContextType;
   const { isLoggedIn, profile } = authInfo;
-  const avatar = profile?.avatar?.url;
+  const avatar = profile?.avatar;
+
+  const handleOnSearchSubmit = (query: string) => {
+    navigate("/blog/search?title=" + query);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -33,30 +38,15 @@ export default function Navbar() {
                 />
               </Link>
             </div>
-            <ul className="items-center hidden space-x-4 sm:flex sm:space-x-8">
-              <li>
-                <Link to={"/"} className="px-2 font-semibold">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} className="px-2 font-semibold">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} className="px-2 font-semibold">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
+            <div className="w-1/2">
+              <AppSearchForm onSubmit={handleOnSearchSubmit} />
+            </div>
             <div className="flex items-center space-x-3">
-              <AppSearchForm />
               {isLoggedIn ? (
                 <>
                   <Link
                     to={"/dashboard"}
-                    className="w-8 h-8 p-0.5 border-2 border-white rounded-full cursor-pointer"
+                    className="w-8 h-8 p-0.5 border-2 border-white rounded-full cursor-pointer overflow-hidden"
                   >
                     <img src={avatar || logo} alt="Dashboard" />
                   </Link>
