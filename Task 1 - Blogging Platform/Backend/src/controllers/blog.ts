@@ -87,7 +87,7 @@ export const getUserBlog: RequestHandler = async (req, res) => {
   if (!isValidObjectId(userId))
     return res.status(403).json({ error: "Invalid request!" });
 
-  const blogs = await Blog.find({ userId }).select(
+  const blogs = await Blog.find({ owner: userId }).select(
     "title poster.url _id createdAt category"
   );
 

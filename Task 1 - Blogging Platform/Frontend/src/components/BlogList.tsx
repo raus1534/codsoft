@@ -22,6 +22,7 @@ export default function BlogList() {
         {blogs.map(({ _id, title, createdAt, poster, content }) => {
           return (
             <BlogCard
+              key={_id}
               id={_id}
               title={title}
               createdAt={createdAt}

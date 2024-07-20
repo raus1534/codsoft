@@ -33,8 +33,10 @@ export default function BlogSearch() {
 
   return (
     <Container className="flex">
-      <div className="w-2/3 p-4 py-3 space-y-2">
-        <h1 className="text-3xl font-bold">Search Result: {query}</h1>
+      <div className="w-full p-4 py-3 space-y-2 sm:w-2/3">
+        <h1 className="text-2xl font-bold sm:text-3xl">
+          Search Result: {query}
+        </h1>
         <NotFoundText visible={resultNotFound} text="Blog Not Found" />
         <div className="w-full h-[200vh] overflow-scroll">
           {blogs.map(({ _id, title, createdAt, content, poster }) => {
@@ -55,7 +57,7 @@ export default function BlogSearch() {
         </div>
       </div>
       {/* //extra */}
-      <div className="w-1/3 px-2 space-y-2">
+      <div className="hidden w-1/3 px-2 space-y-2 sm:block">
         <RecentPost />
         <Categories />
       </div>

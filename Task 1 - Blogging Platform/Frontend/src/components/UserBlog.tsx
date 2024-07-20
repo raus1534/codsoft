@@ -51,7 +51,7 @@ export default function UserBlog() {
       <div className="flex-1 h-screen space-y-4">
         <Link
           to="/blog/create"
-          className="flex items-center justify-center w-1/5 h-10 p-1 text-lg font-semibold text-white transition rounded cursor-pointer bg-primary hover:bg-opacity-90"
+          className="flex items-center justify-center w-1/2 h-10 p-1 text-lg font-semibold text-white transition rounded cursor-pointer sm:w-1/5 bg-primary hover:bg-opacity-90"
         >
           Create Blog
         </Link>

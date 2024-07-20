@@ -66,7 +66,7 @@ export default function BlogForm({ onSubmit, busy, initialValue }: Props) {
     <form className="p-5 space-y-5" onSubmit={handleSubmit}>
       <div className="flex items-center space-x-4">
         <label
-          className="w-full overflow-hidden border-2 cursor-pointer h-[420px] border-primary rounded-xl"
+          className="w-full overflow-hidden border-2 cursor-pointer sm:h-[420px] h-[190px] border-primary sm:rounded-xl"
           htmlFor="poster"
         >
           <input
