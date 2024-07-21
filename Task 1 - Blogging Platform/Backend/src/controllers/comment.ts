@@ -1,9 +1,6 @@
 import { RequestWithFiles } from "#/middlewares/fileParser";
-import { categoriesTypes } from "#/utils/category";
 import { RequestHandler } from "express";
-import Blog, { BlogDocument } from "#/models/Blog";
-import formidable from "formidable";
-import cloudinary from "#/cloud";
+import Blog from "#/models/Blog";
 import { isValidObjectId } from "mongoose";
 import Comment from "#/models/Comment";
 
@@ -37,7 +34,7 @@ export const createComment: RequestHandler = async (
   });
 
   res.status(201).json({
-    comment: newComment,
+    message: "Comment Posted Successfully",
   });
 };
 

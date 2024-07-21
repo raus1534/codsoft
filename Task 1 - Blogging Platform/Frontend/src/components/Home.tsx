@@ -12,6 +12,9 @@ export default function Home() {
         <div className="h-[90vh] md:w-2/3 space-y-2">
           <Slider />
           <hr className="border-2 border-black" />
+          <div className="block md:hidden">
+            <RecentPost />
+          </div>
           <BlogList />
         </div>
         {/* //extra */}

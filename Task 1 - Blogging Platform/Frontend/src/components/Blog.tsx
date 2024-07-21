@@ -59,7 +59,7 @@ export default function Blog() {
             dangerouslySetInnerHTML={sanitizeHTML(singleBlog?.content || "")}
           />
           <hr className="border-2 border-primary" />
-          <Comment />
+          <Comment blog={blogId!} />
         </div>
       </>
       {/* //extra */}
