@@ -19,3 +19,21 @@ export const SignInValidationSchema = yup.object().shape({
   email: yup.string().required("Email is missing!").email("Invalid email id!"),
   password: yup.string().trim().required("Password is missing!"),
 });
+
+export const CreateTaskSchema = yup.object().shape({
+  title: yup
+    .string()
+    .trim()
+    .required("Title is missing!")
+    .min(5, "Title is too short!"),
+  description: yup.string().required("Description is missing!"),
+  dueDate: yup.date().required("DueDate is missing!"),
+});
+
+export const AddChatSchema = yup.object().shape({
+  message: yup
+    .string()
+    .trim()
+    .required("Chat is missing!")
+    .min(2, "Chat is too short!"),
+});
