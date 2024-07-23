@@ -91,9 +91,9 @@ export const getOngoingTasks: RequestHandler = async (req, res) => {
   const tasks = await Task.find({ status: "ongoing" })
     .populate({
       path: "assignedTo",
-      select: "name department", // Select only the fields we need
+      select: "name department avatar.url", // Select only the fields we need
     })
     .exec();
 
-  res.status(200).json(tasks);
+  res.status(200).json({ tasks });
 };
