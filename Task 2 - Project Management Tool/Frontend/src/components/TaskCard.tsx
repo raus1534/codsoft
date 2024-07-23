@@ -37,7 +37,7 @@ export default function TaskCard({
       </CardBody>
       <CardFooter className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          {users.map(({ _id, name, department, avatar }) => {
+          {users?.map(({ _id, name, department, avatar }) => {
             return (
               <Tooltip key={_id} content={name + " | " + department}>
                 <Avatar

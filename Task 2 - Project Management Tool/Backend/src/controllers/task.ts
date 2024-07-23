@@ -68,6 +68,32 @@ export const markTaskAsCompleted: RequestHandler = async (req, res) => {
     message: "Task Completed Successfully",
   });
 };
+export const getTaskInfo: RequestHandler = async (req, res) => {
+  const { taskId } = req.params;
+
+  if (!isValidObjectId(taskId))
+    return res.status(403).json({ error: "Invalid request!" });
+
+  const task = await Task.findById(taskId)
+    .populate({
+      path: "assignedTo",
+      select: "name avatar.url department",
+    })
+    .populate({
+      path: "chat",
+      populate: {
+        path: "messages.user",
+        model: "User",
+        select: "name", // adjust as needed
+      },
+    });
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found!" });
+  }
+
+  res.status(200).json({ task });
+};
 export const deleteTask: RequestHandler = async (req, res) => {
   const { taskId } = req.params;
 
@@ -94,6 +120,13 @@ export const getOngoingTasks: RequestHandler = async (req, res) => {
       select: "name department avatar.url", // Select only the fields we need
     })
     .exec();
+
+  res.status(200).json({ tasks });
+};
+
+export const getAllTasks: RequestHandler = async (req, res) => {
+  // Fetch all tasks with status "ongoing"
+  const tasks = await Task.find({});
 
   res.status(200).json({ tasks });
 };

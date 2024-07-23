@@ -1,9 +1,11 @@
 import Task from "@components/admin/Task";
-import User from "@components/admin/User";
+import CreateTask from "@components/CreateTask";
+import CreateUser from "@components/CreateUser";
 import Dashboard from "@components/Dashboard";
 import Header from "@components/Header";
 import InfoBar from "@components/InfoBar";
 import SideNavbar from "@components/SideNavbar";
+import TaskInfo from "@components/TaskInfo";
 import { Route, Routes } from "react-router";
 
 export default function AdminNavigator() {
@@ -17,8 +19,10 @@ export default function AdminNavigator() {
             <div className="flex-1">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/users" element={<User />} />
                 <Route path="/tasks" element={<Task />} />
+                <Route path="/task/:taskId" element={<TaskInfo />} />
+                <Route path="/addTask" element={<CreateTask />} />
+                <Route path="/addUser" element={<CreateUser />} />
               </Routes>
             </div>
             <InfoBar />

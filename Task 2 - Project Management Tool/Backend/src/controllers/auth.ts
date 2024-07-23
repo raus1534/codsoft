@@ -42,38 +42,35 @@ export const sendProfile: RequestHandler = (req, res) => {
   res.json({ user: req.user });
 };
 
-interface CategorizedUsers {
-  [key: string]: { id: string; name: string }[];
+interface UserDetail {
+  id: string;
+  name: string;
 }
 
+interface CategorizedUsers {
+  [department: string]: UserDetail[];
+}
+
+export const getAllUserName: RequestHandler = async (req, res) => {
+  const users = await User.find().select("name");
+
+  res.status(200).json({ users });
+};
 export const getAllUser: RequestHandler = async (req, res) => {
+  // Fetch all users from the database
   // Fetch all users from the database
   const users = await User.find().exec();
 
-  // Initialize the result object with empty arrays for each department
-  const categorizedUsers: CategorizedUsers = departments.reduce(
-    (acc, department) => {
-      acc[department] = [];
-      return acc;
-    },
-    {} as CategorizedUsers
-  );
+  // Map users to include only the required fields
+  const userDetails = users.map((user) => ({
+    id: user._id.toString(), // Convert ObjectId to string
+    name: user.name,
+    department: user.department,
+    avatar: user.avatar,
+  }));
 
-  // Populate the categorizedUsers object with name and _id
-  users.forEach((user) => {
-    const department = user.department;
-    if (categorizedUsers[department]) {
-      categorizedUsers[department].push({
-        id: user._id.toString(), // Convert ObjectId to string
-        name: user.name,
-      });
-    }
-  });
+  // Sort users by their names in ascending order
+  const sortedUsers = userDetails.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Remove empty departments from the result
-  const result = Object.fromEntries(
-    Object.entries(categorizedUsers).filter(([_, users]) => users.length > 0)
-  );
-
-  res.status(200).json(result);
+  res.status(200).json({ users: sortedUsers });
 };

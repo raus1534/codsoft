@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
-import { PiStudentBold } from "react-icons/pi";
 import { MdCoPresent } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "@hooks/index";
@@ -41,23 +40,13 @@ export default function SideNavbar() {
       <div className="mt-6 space-y-2">
         <NavLink
           onClick={handleOnClick}
-          to="/dashboard"
+          to="/"
           Icon={BiSolidDashboard}
           active={activeNavLink}
         >
           Dashboard
         </NavLink>
 
-        {authInfo?.profile?.role === "admin" ? (
-          <NavLink
-            onClick={handleOnClick}
-            to="/users"
-            Icon={PiStudentBold}
-            active={activeNavLink}
-          >
-            Users
-          </NavLink>
-        ) : null}
         {authInfo?.profile?.role === "admin" ? (
           <NavLink
             onClick={handleOnClick}

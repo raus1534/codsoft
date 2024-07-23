@@ -2,7 +2,9 @@ import { createUser } from "#/controllers/admin";
 import {
   createTask,
   deleteTask,
+  getAllTasks,
   getOngoingTasks,
+  getTaskInfo,
   markTaskAsCompleted,
   updateTask,
 } from "#/controllers/task";
@@ -35,6 +37,8 @@ routes.patch(
 );
 
 routes.get("/getOngoingTask", isAuth, isAdmin, getOngoingTasks);
+routes.get("/getAllTask", isAuth, isAdmin, getAllTasks);
+routes.get("/taskInfo/:taskId", isAuth, getTaskInfo);
 routes.delete("/deleteTask/:taskId", isAuth, isAdmin, deleteTask);
 
 export default routes;
