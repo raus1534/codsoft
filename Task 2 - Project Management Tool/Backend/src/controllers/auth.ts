@@ -42,15 +42,6 @@ export const sendProfile: RequestHandler = (req, res) => {
   res.json({ user: req.user });
 };
 
-interface UserDetail {
-  id: string;
-  name: string;
-}
-
-interface CategorizedUsers {
-  [department: string]: UserDetail[];
-}
-
 export const getAllUserName: RequestHandler = async (req, res) => {
   const users = await User.find().select("name");
 

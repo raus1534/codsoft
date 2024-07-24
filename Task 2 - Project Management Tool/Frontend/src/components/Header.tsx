@@ -33,7 +33,7 @@ export default function Header() {
             />
           ) : (
             <img
-              src={authInfo?.profile?.avatar?.url}
+              src={authInfo?.profile?.avatar}
               className="w-10 border-2 rounded-full"
               alt="PP"
             />

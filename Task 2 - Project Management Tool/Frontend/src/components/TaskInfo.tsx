@@ -4,13 +4,18 @@ import { useParams } from "react-router";
 import TaskCard from "./TaskCard";
 import { IconButton, Textarea } from "@material-tailwind/react";
 import { sendChats } from "@api/chat";
-import { useNotification } from "@hooks/index";
+import { useAuth, useNotification } from "@hooks/index";
+import { AuthContextType } from "@context/AuthProvider";
 
 export default function TaskInfo() {
   const [chat, setChat] = useState("");
   const [task, setTask] = useState<any>();
   const { updateNotification } = useNotification();
   const { taskId } = useParams();
+
+  const { authInfo } = useAuth() as AuthContextType;
+  const { profile } = authInfo;
+
   const getTaskInfos = async () => {
     const { task, error } = await getTaskInfo(taskId!);
     if (error && !task) return;
@@ -47,32 +52,45 @@ export default function TaskInfo() {
               users={task?.assignedTo}
               dueDate={task?.dueDate}
             />
-            {task?.status === "ongoing" ? (
-              <button
-                className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
-                type="button"
-                onClick={handleTaskCompleted}
-              >
-                Mark as Completed
-              </button>
-            ) : (
-              <button
-                className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
-                type="button"
-                disabled
-              >
-                Completed
-              </button>
-            )}
+            {profile?.role === "admin" ? (
+              task?.status === "ongoing" && profile?.role === "admin" ? (
+                <button
+                  className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+                  type="button"
+                  onClick={handleTaskCompleted}
+                >
+                  Mark as Completed
+                </button>
+              ) : (
+                <button
+                  className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+                  type="button"
+                  disabled
+                >
+                  Completed
+                </button>
+              )
+            ) : null}
           </div>
           <div className="flex flex-col items-center justify-end w-3/5 h-full overflow-scroll">
-            {task?.chat?.messages?.map(({ text }: { text: string }) => {
-              return (
-                <textarea className=" w-4/5 peer min-h-[50px]  resize-none rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-primary outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50">
-                  {text}
-                </textarea>
-              );
-            })}
+            {task?.chat?.messages?.map(
+              ({ text, user }: { text: string; user: any }) => {
+                return (
+                  <div className="flex flex-col items-start w-3/4 mb-4">
+                    <div className="text-xs font-medium text-gray-900">
+                      {user.name}
+                    </div>
+                    <textarea
+                      key={text}
+                      className=" w-full peer min-h-[50px] resize-none rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-primary outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
+                      readOnly
+                    >
+                      {text}
+                    </textarea>
+                  </div>
+                );
+              }
+            )}
 
             <div className="flex w-4/5 mt-2 flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 p-2">
               <Textarea

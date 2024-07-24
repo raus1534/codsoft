@@ -2,7 +2,7 @@ import { RequestWithFiles } from "#/middlewares/fileParser";
 import Chat from "#/models/Chat";
 import Task from "#/models/Task";
 import { RequestHandler } from "express";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 interface CreateTaskRequest extends RequestWithFiles {
   body: {
@@ -84,7 +84,7 @@ export const getTaskInfo: RequestHandler = async (req, res) => {
       populate: {
         path: "messages.user",
         model: "User",
-        select: "name", // adjust as needed
+        select: "name avatar.url department",
       },
     });
 
@@ -115,6 +115,25 @@ export const deleteTask: RequestHandler = async (req, res) => {
 export const getOngoingTasks: RequestHandler = async (req, res) => {
   // Fetch all tasks with status "ongoing"
   const tasks = await Task.find({ status: "ongoing" })
+    .populate({
+      path: "assignedTo",
+      select: "name department avatar.url", // Select only the fields we need
+    })
+    .exec();
+
+  res.status(200).json({ tasks });
+};
+
+export const getOngoingTasksUser: RequestHandler = async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  const id = new Types.ObjectId(userId);
+  if (!isValidObjectId(userId))
+    return res.status(422).json({ error: "Invalid Object Id" });
+  const tasks = await Task.find({
+    status: "ongoing",
+    assignedTo: { $in: [id] },
+  })
     .populate({
       path: "assignedTo",
       select: "name department avatar.url", // Select only the fields we need

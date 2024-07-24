@@ -15,6 +15,20 @@ export const getOngoingTask = async () => {
     return handleAxiosError(error);
   }
 };
+export const getOngoingTaskUser = async (userId: string) => {
+  try {
+    const token = localStorage.getItem("auth-token");
+    const { data } = await client.get("/task/getOngoingUser/" + userId, {
+      headers: {
+        authorization: "PMS " + token,
+        accept: "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
 export const markUpdated = async (taskId: string) => {
   try {
     const token = localStorage.getItem("auth-token");

@@ -4,6 +4,7 @@ import {
   deleteTask,
   getAllTasks,
   getOngoingTasks,
+  getOngoingTasksUser,
   getTaskInfo,
   markTaskAsCompleted,
   updateTask,
@@ -37,6 +38,7 @@ routes.patch(
 );
 
 routes.get("/getOngoingTask", isAuth, isAdmin, getOngoingTasks);
+routes.get("/getOngoingUser/:userId", isAuth, getOngoingTasksUser);
 routes.get("/getAllTask", isAuth, isAdmin, getAllTasks);
 routes.get("/taskInfo/:taskId", isAuth, getTaskInfo);
 routes.delete("/deleteTask/:taskId", isAuth, isAdmin, deleteTask);
